@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "firewallRules_ALL_name": {
+            "value": null
+        },
+        "firewallRules_AllowAllWindowsAzureIps_name": {
+            "value": null
+        },
+        "autoscalesettings_ContosoSportsPlan_contososports_East_US_name": {
+            "value": null
+        },
+        "components_contososportsadminme_name": {
+            "value": null
+        },
+        "components_contososportsme_name": {
+            "value": null
+        },
+        "components_offersapime_name": {
+            "value": null
+        },
+        "components_paymentsapime_name": {
+            "value": null
+        },
+        "servers_contososportssqlme_name": {
+            "value": null
+        },
+        "databases_ContosoSportsDB_name": {
+            "value": null
+        },
+        "storageAccounts_contososportsme_name": {
+            "value": null
+        },
+        "serverFarms_ContosoSportsPlan_name": {
+            "value": null
+        },
+        "sites_contososportsadminme_name": {
+            "value": null
+        },
+        "sites_contososportsme_name": {
+            "value": null
+        },
+        "sites_OffersAPIme_name": {
+            "value": null
+        },
+        "sites_PaymentsAPIme_name": {
+            "value": null
+        }
+    }
+}

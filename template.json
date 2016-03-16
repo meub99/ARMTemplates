@@ -1,0 +1,419 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "firewallRules_ALL_name": {
+            "type": "string",
+            "defaultValue": "ALL"
+        },
+        "firewallRules_AllowAllWindowsAzureIps_name": {
+            "type": "string",
+            "defaultValue": "AllowAllWindowsAzureIps"
+        },
+        "autoscalesettings_ContosoSportsPlan_contososports_East_US_name": {
+            "type": "string",
+            "defaultValue": "ContosoSportsPlan-contososports-East US"
+        },
+        "components_contososportsadminme_name": {
+            "type": "string",
+            "defaultValue": "contososportsadminme"
+        },
+        "components_contososportsme_name": {
+            "type": "string",
+            "defaultValue": "contososportsme"
+        },
+        "components_offersapime_name": {
+            "type": "string",
+            "defaultValue": "offersapime"
+        },
+        "components_paymentsapime_name": {
+            "type": "string",
+            "defaultValue": "paymentsapime"
+        },
+        "servers_contososportssqlme_name": {
+            "type": "string",
+            "defaultValue": "contososportssqlme"
+        },
+        "databases_ContosoSportsDB_name": {
+            "type": "string",
+            "defaultValue": "ContosoSportsDB"
+        },
+        "storageAccounts_contososportsme_name": {
+            "type": "string",
+            "defaultValue": "contososportsme"
+        },
+        "serverFarms_ContosoSportsPlan_name": {
+            "type": "string",
+            "defaultValue": "ContosoSportsPlan"
+        },
+        "sites_contososportsadminme_name": {
+            "type": "string",
+            "defaultValue": "contososportsadminme"
+        },
+        "sites_contososportsme_name": {
+            "type": "string",
+            "defaultValue": "contososportsme"
+        },
+        "sites_OffersAPIme_name": {
+            "type": "string",
+            "defaultValue": "OffersAPIme"
+        },
+        "sites_PaymentsAPIme_name": {
+            "type": "string",
+            "defaultValue": "PaymentsAPIme"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Sql/servers/contososportssqlme/firewallRules/ALL",
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "kind": "v12.0",
+            "name": "[parameters('firewallRules_ALL_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "East US",
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "255.255.255.255"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_contososportssqlme_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Sql/servers/contososportssqlme/firewallRules/AllowAllWindowsAzureIps",
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "kind": "v12.0",
+            "name": "[parameters('firewallRules_AllowAllWindowsAzureIps_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "East US",
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/firewallRules', parameters('firewallRules_ALL_name'))]",
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_contososportssqlme_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/microsoft.insights/autoscalesettings/ContosoSportsPlan-contososports-East US",
+            "type": "microsoft.insights/autoscalesettings",
+            "name": "[parameters('autoscalesettings_ContosoSportsPlan_contososports_East_US_name')]",
+            "apiVersion": "2015-04-01",
+            "location": "East US",
+            "properties": {
+                "profiles": [
+                    {
+                        "name": "Default",
+                        "capacity": {
+                            "minimum": "1",
+                            "maximum": "1",
+                            "default": "1"
+                        },
+                        "rules": [
+                            {
+                                "metricTrigger": {
+                                    "metricName": "CpuPercentage",
+                                    "metricNamespace": "",
+                                    "metricResourceUri": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "PT10M",
+                                    "timeAggregation": "Average",
+                                    "operator": "GreaterThan",
+                                    "threshold": 80
+                                },
+                                "scaleAction": {
+                                    "direction": "Increase",
+                                    "type": "ChangeCount",
+                                    "value": "1",
+                                    "cooldown": "PT10M"
+                                }
+                            },
+                            {
+                                "metricTrigger": {
+                                    "metricName": "CpuPercentage",
+                                    "metricNamespace": "",
+                                    "metricResourceUri": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]",
+                                    "timeGrain": "PT1M",
+                                    "statistic": "Average",
+                                    "timeWindow": "PT1H",
+                                    "timeAggregation": "Average",
+                                    "operator": "LessThan",
+                                    "threshold": 60
+                                },
+                                "scaleAction": {
+                                    "direction": "Decrease",
+                                    "type": "ChangeCount",
+                                    "value": "1",
+                                    "cooldown": "PT1H"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "enabled": true,
+                "name": "[parameters('autoscalesettings_ContosoSportsPlan_contososports_East_US_name')]",
+                "targetResourceUri": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/microsoft.insights/components/contososportsadminme",
+            "type": "microsoft.insights/components",
+            "kind": "web",
+            "name": "[parameters('components_contososportsadminme_name')]",
+            "apiVersion": "2015-05-01",
+            "location": "Central US",
+            "properties": {
+                "ApplicationId": "[parameters('components_contososportsadminme_name')]"
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/microsoft.insights/components/contososportsme",
+            "type": "microsoft.insights/components",
+            "kind": "web",
+            "name": "[parameters('components_contososportsme_name')]",
+            "apiVersion": "2015-05-01",
+            "location": "Central US",
+            "properties": {
+                "ApplicationId": "[parameters('components_contososportsme_name')]"
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/microsoft.insights/components/OffersAPIme",
+            "type": "microsoft.insights/components",
+            "kind": "web",
+            "name": "[parameters('components_offersapime_name')]",
+            "apiVersion": "2015-05-01",
+            "location": "Central US",
+            "properties": {
+                "ApplicationId": "[parameters('components_offersapime_name')]"
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/microsoft.insights/components/PaymentsAPIme",
+            "type": "microsoft.insights/components",
+            "kind": "web",
+            "name": "[parameters('components_paymentsapime_name')]",
+            "apiVersion": "2015-05-01",
+            "location": "Central US",
+            "properties": {
+                "ApplicationId": "[parameters('components_paymentsapime_name')]"
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Sql/servers/contososportssqlme",
+            "type": "Microsoft.Sql/servers",
+            "kind": "v12.0",
+            "name": "[parameters('servers_contososportssqlme_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "East US",
+            "properties": {
+                "administratorLogin": "mieubankadmin",
+                "administratorLoginPassword": null,
+                "version": "12.0"
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Sql/servers/contososportssqlme/databases/ContosoSportsDB",
+            "type": "Microsoft.Sql/servers/databases",
+            "kind": "v12.0,user",
+            "name": "[parameters('databases_ContosoSportsDB_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "East US",
+            "properties": {
+                "databaseId": "6ada8f9b-72e4-48e6-a500-79e177c02b3b",
+                "edition": "Standard",
+                "status": "Online",
+                "serviceLevelObjective": "S0",
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": "268435456000",
+                "creationDate": "2016-03-15T19:31:39.503Z",
+                "currentServiceObjectiveId": "f1173c43-91bd-4aaa-973c-54e79e15235b",
+                "requestedServiceObjectiveId": "f1173c43-91bd-4aaa-973c-54e79e15235b",
+                "requestedServiceObjectiveName": null,
+                "defaultSecondaryLocation": "West US",
+                "earliestRestoreDate": "2016-03-15T19:42:16.653Z",
+                "elasticPoolName": null,
+                "containmentState": 2
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_contososportssqlme_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Storage/storageAccounts/contososportsme",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccounts_contososportsme_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "eastus",
+            "properties": {
+                "accountType": "Standard_RAGRS"
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Web/serverFarms/ContosoSportsPlan",
+            "type": "Microsoft.Web/serverFarms",
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "size": "S1",
+                "family": "S",
+                "capacity": 1
+            },
+            "name": "[parameters('serverFarms_ContosoSportsPlan_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "East US",
+            "properties": {
+                "name": "[parameters('serverFarms_ContosoSportsPlan_name')]",
+                "numberOfWorkers": 1
+            }
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Web/sites/contososportsadminme",
+            "type": "Microsoft.Web/sites",
+            "name": "[parameters('sites_contososportsadminme_name')]",
+            "apiVersion": "2015-08-01-preview",
+            "location": "East US",
+            "properties": {
+                "name": "[parameters('sites_contososportsadminme_name')]",
+                "hostNames": [
+                    "[concat(parameters('sites_contososportsadminme_name'),'.azurewebsites.net')]"
+                ],
+                "enabledHostNames": [
+                    "[concat(parameters('sites_contososportsadminme_name'),'.azurewebsites.net')]",
+                    "[concat(parameters('sites_contososportsadminme_name'),'.scm.azurewebsites.net')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_contososportsadminme_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(parameters('sites_contososportsadminme_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Web/sites/contososportsme",
+            "type": "Microsoft.Web/sites",
+            "name": "[parameters('sites_contososportsme_name')]",
+            "apiVersion": "2015-08-01-preview",
+            "location": "East US",
+            "properties": {
+                "name": "[parameters('sites_contososportsme_name')]",
+                "hostNames": [
+                    "[concat(parameters('sites_contososportsme_name'),'.azurewebsites.net')]"
+                ],
+                "enabledHostNames": [
+                    "[concat(parameters('sites_contososportsme_name'),'.azurewebsites.net')]",
+                    "[concat(parameters('sites_contososportsme_name'),'.scm.azurewebsites.net')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_contososportsme_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(parameters('sites_contososportsme_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Web/sites/OffersAPIme",
+            "type": "Microsoft.Web/sites",
+            "kind": "api",
+            "name": "[parameters('sites_OffersAPIme_name')]",
+            "apiVersion": "2015-08-01-preview",
+            "location": "East US",
+            "properties": {
+                "name": "[parameters('sites_OffersAPIme_name')]",
+                "hostNames": [
+                    "offersapime.azurewebsites.net"
+                ],
+                "enabledHostNames": [
+                    "offersapime.azurewebsites.net",
+                    "offersapime.scm.azurewebsites.net"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "offersapime.azurewebsites.net",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "offersapime.scm.azurewebsites.net",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: /subscriptions/198c3e05-6a54-4643-ab51-8bfb2923a0b1/resourceGroups/contososports/providers/Microsoft.Web/sites/PaymentsAPIme",
+            "type": "Microsoft.Web/sites",
+            "kind": "api",
+            "name": "[parameters('sites_PaymentsAPIme_name')]",
+            "apiVersion": "2015-08-01-preview",
+            "location": "East US",
+            "properties": {
+                "name": "[parameters('sites_PaymentsAPIme_name')]",
+                "hostNames": [
+                    "paymentsapime.azurewebsites.net"
+                ],
+                "enabledHostNames": [
+                    "paymentsapime.azurewebsites.net",
+                    "paymentsapime.scm.azurewebsites.net"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "paymentsapime.azurewebsites.net",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "paymentsapime.scm.azurewebsites.net",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_ContosoSportsPlan_name'))]"
+            ]
+        }
+    ]
+}
