@@ -1,0 +1,48 @@
+{
+  "if": {
+    "not": {
+      "anyOf": [
+        {
+          "source": "action",
+          "like": "Microsoft.Compute/*"
+        },
+        {
+          "source": "action",
+          "like": "Microsoft.ServerManagement/*"
+        },
+        {
+          "source": "action",
+          "like": "Microsoft.Storage/*"
+        },
+        {
+          "source": "action",
+          "like": "Microsoft.Network/*"
+        },
+        {
+          "source": "action",
+          "like": "Microsoft.RecoveryServices/*"
+        },
+        {
+          "source": "action",
+          "like": "Microsoft.DevTestLab/*"
+        },
+        {
+          "source": "action",
+          "like": "Microsoft.KeyVault/*"
+        },
+        {
+          "source": "action",
+          "like": "Microsoft.AppService/*"
+        },
+        {
+          "source": "action",
+          "like": "Microsoft.Sql/*"
+        }
+
+      ]
+    }
+  },
+  "then": {
+    "effect": "deny"
+  }
+}

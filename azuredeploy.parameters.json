@@ -1,0 +1,30 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnet1Name": {
+      "value": "vnet1"
+    },
+    "loadmasterName": {
+      "value": "loadmaster"
+    },
+    "loadmasterAdminUserName": {
+      "value": "mieubankadmin"
+    },
+   
+      "availabilitySetName": {
+          "value": "as1"
+      },
+      "loadbalancerName": {
+          "value": "lb1"
+      },
+      "publicIPAddressName": {
+          "value": "pubip1"
+      },
+      "loadmasterVersion": {
+          "value": "freeloadmaster"
+      },
+      
+    
+  }
+}

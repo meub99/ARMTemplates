@@ -1,0 +1,21 @@
+{
+  "if": {
+    "not": {
+      "anyOf": [
+        {
+          "source": "action",
+          "like": "Microsoft.Resources/[ProjectResourceGroup]/*"
+        }
+      ]
+    }
+  },
+  "then": {
+    "effect": "append",
+    "details": [
+      {
+        "field": "tags",
+        "value": { "ioCode": "[IOCODEVALUE]" }
+      }
+    ]
+  }
+}
